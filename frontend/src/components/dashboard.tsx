@@ -1,3 +1,4 @@
+// components/dashboard.tsx - UPDATED
 "use client"
 
 import { useState } from "react"
@@ -7,8 +8,8 @@ import EventSelector from "./EventSelector"
 import QuestionInput from "./QuestionInput"
 import SimulationButton from "./SimulationBtn"
 import ResultsDisplay from "./ResultDisplay"
+import ProgressModal from "./ProgressModal"
 import { mockSimulationResponse } from "@/lib/mock-data"
-import { Menu, Bell, Settings, HelpCircle } from "lucide-react"
 
 interface SimulationResult {
     result: string
@@ -34,12 +35,38 @@ export default function Dashboard() {
     const [isLoading, setIsLoading] = useState(false)
     const [result, setResult] = useState<SimulationResult | null>(null)
 
+    // ADD THESE STATES FOR PROGRESS MODAL
+    const [showProgressModal, setShowProgressModal] = useState(false)
+    const [currentProgressStep, setCurrentProgressStep] = useState(1)
+
     const getCurrentStep = () => {
         if (result) return 3
         if (question.trim()) return 2
         if (selectedEvent) return 1
         if (file) return 0
         return -1
+    }
+
+    // ADD PROGRESS SIMULATION FUNCTION
+    const simulateProgress = () => {
+        setCurrentProgressStep(1)
+        const steps = [1, 2, 3, 4]
+        let currentIndex = 0
+
+        const interval = setInterval(() => {
+            if (currentIndex < steps.length) {
+                setCurrentProgressStep(steps[currentIndex])
+                currentIndex++
+            } else {
+                clearInterval(interval)
+                // When progress completes, show results and close modal
+                setResult(mockSimulationResponse)
+                setShowProgressModal(false)
+                setIsLoading(false)
+            }
+        }, 1500) // Each step takes 1.5 seconds
+
+        return interval
     }
 
     const handleRunSimulation = async () => {
@@ -49,9 +76,13 @@ export default function Dashboard() {
         }
 
         setIsLoading(true)
+        setShowProgressModal(true)
 
         try {
-            // TODO: Replace with actual API call
+            // Start the progress simulation
+            const progressInterval = simulateProgress()
+
+            // In real app, this would be your API call
             // const formData = new FormData()
             // formData.append('file', file)
             // formData.append('event', selectedEvent)
@@ -59,15 +90,20 @@ export default function Dashboard() {
             // const response = await axios.post('/api/simulate', formData)
             // setResult(response.data)
 
-            // Mock API response
-            await new Promise((resolve) => setTimeout(resolve, 2000))
-            setResult(mockSimulationResponse)
+            // Clean up interval when component unmounts or simulation completes
+            return () => clearInterval(progressInterval)
         } catch (error) {
             console.error("Simulation error:", error)
             alert("Error running simulation")
-        } finally {
+            setShowProgressModal(false)
             setIsLoading(false)
         }
+    }
+
+    const handleCancelSimulation = () => {
+        setShowProgressModal(false)
+        setIsLoading(false)
+        setCurrentProgressStep(1)
     }
 
     const handleStartNewAnalysis = () => {
@@ -79,33 +115,13 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen">
-            <header className="border-b border-mint-accent/40 bg-gradient-to-r from-white via-mint-light/50 to-white backdrop-blur-md sticky top-0 z-10 transition-smooth shadow-sm shadow-mint-dark/5">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="animate-fade-in">
-                            <h1 className="text-3xl font-bold bg-gradient-to-r from-mint-dark to-mint-darker bg-clip-text text-transparent">
-                                LIFELOOP
-                            </h1>
-                            <p className="text-sm text-deep-grey/60">Chaos Lab Simulation</p>
-                        </div>
 
-                        <div className="flex items-center gap-3">
-                            <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                                <Bell className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                            </button>
-                            <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                                <HelpCircle className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                            </button>
-                            <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                                <Settings className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                            </button>
-                            <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                                <Menu className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            {/* Progress Modal */}
+            <ProgressModal
+                isOpen={showProgressModal}
+                onClose={handleCancelSimulation}
+                currentStep={currentProgressStep}
+            />
 
             {/* Main Content */}
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
