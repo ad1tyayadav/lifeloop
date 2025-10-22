@@ -1,17 +1,23 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const db = require('../models/db');
 
-module.exports = async function (req, res, next) {
-  const authHeader = req.headers.authorization || req.headers.Authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
-  if (!token) return res.status(401).json({ message: 'No token, authorization denied' });
+const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret_for_prod';
+
+function authMiddleware(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth) return res.status(401).json({ error: 'Missing Authorization' });
+  const parts = auth.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') return res.status(401).json({ error: 'Invalid Authorization' });
+  const token = parts[1];
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-    req.user = await User.findById(decoded.id).select('-password');
-    if (!req.user) return res.status(401).json({ message: 'User not found' });
+    const payload = jwt.verify(token, JWT_SECRET);
+    const user = db.get('SELECT id, name, email FROM users WHERE id = ?', [payload.id]);
+    if (!user) return res.status(401).json({ error: 'User not found' });
+    req.user = user;
     next();
   } catch (err) {
-    console.error(err);
-    res.status(401).json({ message: 'Token is not valid' });
+    return res.status(401).json({ error: 'Invalid token' });
   }
-};
+}
+
+module.exports = authMiddleware;

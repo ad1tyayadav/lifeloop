@@ -1,0 +1,41 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS simulations (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT,
+  event_type TEXT,
+  csv_filename TEXT,
+  input_summary TEXT,
+  result_json TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS simulation_history (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  simulation_id INTEGER NOT NULL,
+  question TEXT,
+  agent_responses TEXT,
+  result_snapshot TEXT,
+  event_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(simulation_id) REFERENCES simulations(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS files (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  simulation_id INTEGER,
+  filename TEXT NOT NULL,
+  path TEXT NOT NULL,
+  uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY(simulation_id) REFERENCES simulations(id) ON DELETE SET NULL
+);
