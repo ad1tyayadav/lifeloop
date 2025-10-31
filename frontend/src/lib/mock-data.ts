@@ -1,8 +1,11 @@
 export const mockSimulationResponse = {
-  result:
-    "15 suspicious transactions detected across 3 accounts during the market volatility event",
-  suggestion:
-    "Consider investigating accounts ACC-2847, ACC-5921, and ACC-7634. These accounts show unusual trading patterns that deviate from their historical behavior by 340%.",
+  impact: {
+    revenueDrop: 12,
+    workloadIncrease: 25, 
+    trustDecline: 8
+  },
+  report: "15 suspicious transactions detected across 3 accounts during the market volatility event",
+  suggestion: "Revenue expected to drop 12%. Prioritize retention programs.",
   details: {
     transactionsAnalyzed: 2847,
     suspiciousCount: 15,

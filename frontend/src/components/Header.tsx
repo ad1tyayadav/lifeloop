@@ -1,9 +1,8 @@
-// components/Header.tsx
 "use client"
 
 import { useRouter } from 'next/navigation';
 import { useApp } from '@/contexts/AppContext';
-import { History, Bell, HelpCircle, Settings, LogOut, Home } from 'lucide-react';
+import { History, LogOut, Home, Play } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Header() {
@@ -20,62 +19,45 @@ export default function Header() {
     };
 
     return (
-        <header className="border-b border-mint-accent/40 bg-gradient-to-r from-white via-mint-light/50 to-white backdrop-blur-md sticky top-0 z-10 transition-smooth shadow-sm shadow-mint-dark/5">
+        <header className="border-b border-[#39D98A]/20 bg-gradient-to-r from-white via-[#ECFFF9] to-white backdrop-blur-md sticky top-0 z-50 transition-smooth shadow-sm">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 <div className="flex items-center justify-between">
-                    {/* Logo - Clickable to go to dashboard */}
+                    {/* Logo */}
                     <button
                         onClick={() => handleNavigate('/dashboard')}
                         className="animate-fade-in text-left hover:opacity-80 transition-smooth"
                     >
-                        <Link href={'/dashboard'} className="text-3xl font-bold bg-gradient-to-r from-mint-dark to-mint-darker bg-clip-text text-transparent">
+                        <Link href={'/dashboard'} className="text-3xl font-bold text-[#39D98A]">
                             LIFELOOP
                         </Link>
-                        <p className="text-sm text-deep-grey/60">Chaos Lab Simulation</p>
                     </button>
 
                     {/* Navigation Buttons */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                         {/* Dashboard Button */}
                         <button
                             onClick={() => handleNavigate('/dashboard')}
-                            className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group"
-                            title="Go to Dashboard"
+                            className="p-2 rounded-lg text-[#39D98A] hover:bg-[#39D98A]/20 transition-colors group"
                         >
-                            <Home className="w-5 h-5 group-hover:scale-110 transition-smooth" />
+                            Dashboard
                         </button>
 
                         {/* History Button */}
                         <button
                             onClick={() => handleNavigate('/history')}
-                            className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group"
+                            className="p-2 rounded-lg  text-[#39D98A] hover:bg-[#39D98A]/20 transition-colors group"
                             title="View History"
                         >
-                            <History className="w-5 h-5 group-hover:scale-110 transition-smooth" />
+                            History
                         </button>
-
-                        {/* Notifications
-                        <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                            <Bell className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                        </button> */}
-
-                        {/* Help
-                        <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                            <HelpCircle className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                        </button> */}
-
-                        {/* Settings
-                        <button className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-mint-light/60 transition-smooth hover:shadow-md active:scale-95 group">
-                            <Settings className="w-5 h-5 group-hover:scale-110 transition-smooth" />
-                        </button> */}
 
                         {/* Logout Button */}
                         <button
                             onClick={handleLogout}
-                            className="p-2.5 rounded-lg bg-mint-light/40 text-mint-dark hover:bg-red-50 hover:text-red-600 transition-smooth hover:shadow-md active:scale-95 group"
+                            className="p-2 rounded-lg bg-[#39D98A]/10 text-[#39D98A] hover:bg-red-50 hover:text-red-600 transition-colors"
                             title="Logout"
                         >
-                            <LogOut className="w-5 h-5 group-hover:scale-110 transition-smooth" />
+                            <LogOut className="w-5 h-5" />
                         </button>
                     </div>
                 </div>

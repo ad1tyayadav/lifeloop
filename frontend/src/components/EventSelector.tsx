@@ -14,7 +14,7 @@ const EVENTS = [
 export default function EventSelector({ selectedEvent, onEventChange }: EventSelectorProps) {
     return (
         <div>
-            <label className="block text-sm font-semibold text-soft-black mb-4">Select Event</label>
+            <label className="block text-sm font-semibold text-[#1E1E1E] mb-4">Select Event</label>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {EVENTS.map((event, index) => (
@@ -23,12 +23,12 @@ export default function EventSelector({ selectedEvent, onEventChange }: EventSel
                         onClick={() => onEventChange(event.id)}
                         style={{ animationDelay: `${index * 0.1}s` }}
                         className={`p-4 rounded-xl border-2 transition-smooth active:scale-95 animate-fade-in ${selectedEvent === event.id
-                                ? "border-mint-dark bg-gradient-to-br from-mint-light to-mint-accent shadow-lg shadow-mint-dark/20 mint-glow"
-                                : "border-mint-accent/40 hover:border-mint-dark/60 hover:bg-mint-light/20 hover:shadow-md"
+                                ? "border-[#39D98A] bg-gradient-to-br from-[#39D98A]/10 to-[#39D98A]/5 shadow-lg shadow-[#39D98A]/20 electric-glow"
+                                : "border-[#39D98A]/20 hover:border-[#39D98A]/60 hover:bg-[#39D98A]/5 hover:shadow-md"
                             }`}
                     >
-                        <p className="font-semibold text-soft-black text-sm">{event.label}</p>
-                        <p className="text-xs text-deep-grey/60 mt-2">{event.description}</p>
+                        <p className="font-semibold text-[#1E1E1E] text-sm">{event.label}</p>
+                        <p className="text-xs text-[#5A5A5A] mt-2">{event.description}</p>
                     </button>
                 ))}
             </div>

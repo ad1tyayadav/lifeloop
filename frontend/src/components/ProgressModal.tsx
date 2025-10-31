@@ -40,31 +40,31 @@ export default function ProgressModal({ isOpen, onClose, currentStep }: Progress
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="glass rounded-2xl p-8 w-full max-w-md mx-4 shadow-xl border border-mint-accent/50 animate-scale-in">
+            <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4 shadow-xl border border-gray-200">
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-mint-dark to-mint-darker bg-clip-text text-transparent mb-2">
+                <div className="text-center mb-6">
+                    <h2 className="text-xl font-bold text-gray-900 mb-2">
                         Running Simulation
                     </h2>
-                    <p className="text-deep-grey/60">Analyzing your financial data</p>
+                    <p className="text-gray-600">Analyzing your financial data</p>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mb-8">
-                    <div className="flex justify-between text-sm text-deep-grey/60 mb-2">
+                <div className="mb-6">
+                    <div className="flex justify-between text-sm text-gray-600 mb-2">
                         <span>Progress</span>
                         <span>{progress}%</span>
                     </div>
-                    <div className="w-full bg-mint-accent/20 rounded-full h-3">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
-                            className="bg-gradient-to-r from-mint-dark to-mint-darker h-3 rounded-full transition-all duration-300 ease-out"
+                            className="bg-[#39D98A] h-2 rounded-full transition-all duration-300 ease-out"
                             style={{ width: `${progress}%` }}
                         />
                     </div>
                 </div>
 
                 {/* Steps */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {steps.map((step, index) => {
                         const StepIcon = step.icon
                         const isCompleted = currentStep > step.id
@@ -74,39 +74,43 @@ export default function ProgressModal({ isOpen, onClose, currentStep }: Progress
                         return (
                             <div
                                 key={step.id}
-                                className={`flex items-center gap-4 p-3 rounded-xl transition-smooth ${isCurrent ? 'bg-mint-light/40 border border-mint-dark/20' : ''
-                                    }`}
+                                className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${
+                                    isCurrent ? 'bg-[#39D98A]/10 border border-[#39D98A]/20' : ''
+                                }`}
                             >
                                 {/* Icon */}
-                                <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-smooth ${isCompleted
-                                        ? 'bg-gradient-to-br from-mint-dark to-mint-darker text-white'
+                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                                    isCompleted
+                                        ? 'bg-[#39D98A] text-white'
                                         : isCurrent
-                                            ? 'bg-mint-dark text-white animate-pulse-mint'
-                                            : 'bg-mint-accent/30 text-deep-grey/40'
-                                    }`}>
+                                            ? 'bg-[#39D98A] text-white'
+                                            : 'bg-gray-100 text-gray-400'
+                                }`}>
                                     {isCurrent && step.id !== 4 ? (
-                                        <Loader className="w-5 h-5 animate-spin" />
+                                        <Loader className="w-4 h-4 animate-spin" />
                                     ) : (
-                                        <StepIcon className="w-5 h-5" />
+                                        <StepIcon className="w-4 h-4" />
                                     )}
                                 </div>
 
                                 {/* Text */}
                                 <div className="flex-1">
-                                    <p className={`font-semibold transition-smooth ${isCompleted || isCurrent ? 'text-soft-black' : 'text-deep-grey/40'
-                                        }`}>
+                                    <p className={`font-medium transition-colors ${
+                                        isCompleted || isCurrent ? 'text-gray-900' : 'text-gray-400'
+                                    }`}>
                                         {step.name}
                                     </p>
-                                    <p className={`text-sm transition-smooth ${isCompleted || isCurrent ? 'text-deep-grey/60' : 'text-deep-grey/40'
-                                        }`}>
+                                    <p className={`text-sm transition-colors ${
+                                        isCompleted || isCurrent ? 'text-gray-600' : 'text-gray-400'
+                                    }`}>
                                         {step.description}
                                     </p>
                                 </div>
 
                                 {/* Checkmark for completed steps */}
                                 {isCompleted && (
-                                    <div className="flex-shrink-0 w-6 h-6 bg-mint-dark rounded-full flex items-center justify-center">
-                                        <Check className="w-4 h-4 text-white" />
+                                    <div className="flex-shrink-0 w-5 h-5 bg-[#39D98A] rounded-full flex items-center justify-center">
+                                        <Check className="w-3 h-3 text-white" />
                                     </div>
                                 )}
                             </div>
@@ -117,7 +121,7 @@ export default function ProgressModal({ isOpen, onClose, currentStep }: Progress
                 {/* Cancel Button */}
                 <button
                     onClick={onClose}
-                    className="w-full mt-6 py-3 px-4 border border-mint-accent/40 text-mint-dark rounded-lg font-semibold hover:bg-mint-light/20 transition-smooth hover:shadow-md active:scale-95"
+                    className="w-full mt-6 py-2 px-4 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
                 >
                     Cancel Simulation
                 </button>

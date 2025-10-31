@@ -1,10 +1,16 @@
 "use client"
 
-import { CheckCircle2, AlertCircle, TrendingUp, ArrowRight } from "lucide-react"
+import { useEffect, useState } from "react"
+import { TrendingDown, TrendingUp, Users, AlertTriangle, Download, BarChart3 } from "lucide-react"
 
 interface ResultsDisplayProps {
     result: {
-        result: string
+        impact: {
+            revenueDrop: number
+            workloadIncrease: number
+            trustDecline: number
+        }
+        report: string
         suggestion: string
         details?: {
             transactionsAnalyzed: number
@@ -16,99 +22,181 @@ interface ResultsDisplayProps {
 }
 
 export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDisplayProps) {
+    const [revenueCount, setRevenueCount] = useState(0)
+    const [workloadCount, setWorkloadCount] = useState(0)
+    const [trustCount, setTrustCount] = useState(0)
+
+    useEffect(() => {
+        const duration = 2000
+        const steps = 60
+        const increment = (target: number) => target / steps
+        const interval = duration / steps
+
+        let currentRevenue = 0
+        let currentWorkload = 0
+        let currentTrust = 0
+
+        const revenueTimer = setInterval(() => {
+            currentRevenue += increment(result.impact.revenueDrop)
+            if (currentRevenue >= result.impact.revenueDrop) {
+                currentRevenue = result.impact.revenueDrop
+                clearInterval(revenueTimer)
+            }
+            setRevenueCount(Math.floor(currentRevenue))
+        }, interval)
+
+        const workloadTimer = setInterval(() => {
+            currentWorkload += increment(result.impact.workloadIncrease)
+            if (currentWorkload >= result.impact.workloadIncrease) {
+                currentWorkload = result.impact.workloadIncrease
+                clearInterval(workloadTimer)
+            }
+            setWorkloadCount(Math.floor(currentWorkload))
+        }, interval)
+
+        const trustTimer = setInterval(() => {
+            currentTrust += increment(result.impact.trustDecline)
+            if (currentTrust >= result.impact.trustDecline) {
+                currentTrust = result.impact.trustDecline
+                clearInterval(trustTimer)
+            }
+            setTrustCount(Math.floor(currentTrust))
+        }, interval)
+
+        return () => {
+            clearInterval(revenueTimer)
+            clearInterval(workloadTimer)
+            clearInterval(trustTimer)
+        }
+    }, [result.impact])
+
     const getRiskColor = (level: string) => {
         switch (level.toLowerCase()) {
             case "high":
                 return "text-red-600 bg-red-50 border-red-200"
             case "medium":
-                return "text-yellow-600 bg-yellow-50 border-yellow-200"
+                return "text-amber-600 bg-amber-50 border-amber-200"
             case "low":
-                return "text-green-600 bg-green-50 border-green-200"
+                return "text-[#39D98A] bg-[#39D98A]/10 border-[#39D98A]/20"
             default:
-                return "text-mint-dark bg-mint-light border-mint-accent"
+                return "text-gray-600 bg-gray-50 border-gray-200"
         }
     }
 
     return (
-        <div className="mt-12 space-y-8 animate-slide-in-up">
+        <div className="space-y-6">
+            {/* Header */}
             <div>
-                <h2 className="text-3xl font-bold bg-gradient-to-r from-soft-black to-deep-grey bg-clip-text text-transparent mb-2">
-                    Analysis Results
-                </h2>
-                <p className="text-deep-grey/60">Here&apos;s what we found in your data</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Simulation Results</h2>
+                <p className="text-gray-600">Chain-reaction impact analysis</p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="glass rounded-2xl p-8 shadow-lg border-l-4 border-mint-dark transition-smooth hover:shadow-xl hover:scale-105 hover:bg-white/80 animate-fade-in">
-                    <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-mint-light to-mint-medium flex items-center justify-center flex-shrink-0 shadow-md shadow-mint-dark/20">
-                            <CheckCircle2 className="w-7 h-7 text-mint-dark" />
+            {/* Impact Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Revenue Impact Card */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+                            <TrendingDown className="w-5 h-5 text-red-600" />
                         </div>
-                        <div>
-                            <h3 className="font-semibold text-soft-black mb-2 text-lg">Key Finding</h3>
-                            <p className="text-deep-grey/80 leading-relaxed">{result.result}</p>
+                        <span className="text-sm font-medium text-red-600">Revenue</span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">{revenueCount}%</p>
+                    <p className="text-sm text-gray-500">Projected drop</p>
+                </div>
+
+                {/* Workload Impact Card */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
+                            <TrendingUp className="w-5 h-5 text-amber-600" />
+                        </div>
+                        <span className="text-sm font-medium text-amber-600">Workload</span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">+{workloadCount}%</p>
+                    <p className="text-sm text-gray-500">Increase expected</p>
+                </div>
+
+                {/* Trust Impact Card */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="w-10 h-10 rounded-lg bg-[#39D98A]/10 flex items-center justify-center">
+                            <Users className="w-5 h-5 text-[#39D98A]" />
+                        </div>
+                        <span className="text-sm font-medium text-[#39D98A]">Trust</span>
+                    </div>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">-{trustCount}%</p>
+                    <p className="text-sm text-gray-500">Decline forecast</p>
+                </div>
+            </div>
+
+            {/* Chart Area & AI Report */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {/* Chart Placeholder */}
+                <div className="lg:col-span-2 bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                        <BarChart3 className="w-5 h-5 text-[#39D98A]" />
+                        <h3 className="text-lg font-semibold text-gray-900">Impact Analysis</h3>
+                    </div>
+                    <div className="h-48 bg-gray-50 rounded border border-gray-200 flex items-center justify-center">
+                        <div className="text-center">
+                            <BarChart3 className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                            <p className="text-gray-500 text-sm">Interactive chart visualization</p>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    className="glass rounded-2xl p-8 shadow-lg border-l-4 border-mint-darker transition-smooth hover:shadow-xl hover:scale-105 hover:bg-white/80 animate-fade-in"
-                    style={{ animationDelay: "0.1s" }}
-                >
-                    <div className="flex items-start gap-4">
-                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-mint-accent to-mint-medium flex items-center justify-center flex-shrink-0 shadow-md shadow-mint-dark/20">
-                            <AlertCircle className="w-7 h-7 text-mint-dark" />
+                {/* AI Report */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                        <AlertTriangle className="w-5 h-5 text-[#39D98A]" />
+                        <h3 className="text-lg font-semibold text-gray-900">AI Report</h3>
+                    </div>
+                    <div className="space-y-3">
+                        <div className="p-3 bg-[#39D98A]/5 rounded border border-[#39D98A]/20">
+                            <p className="text-sm font-medium text-gray-900 mb-1">Recommendation</p>
+                            <p className="text-gray-600 text-sm">{result.suggestion}</p>
                         </div>
-                        <div>
-                            <h3 className="font-semibold text-soft-black mb-2 text-lg">Recommendation</h3>
-                            <p className="text-deep-grey/80 leading-relaxed">{result.suggestion}</p>
+                        <div className="p-3 bg-gray-50 rounded border border-gray-200">
+                            <p className="text-sm font-medium text-gray-900 mb-1">Analysis</p>
+                            <p className="text-gray-600 text-sm">{result.report}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
+            {/* Detailed Metrics */}
             {result.details && (
-                <div
-                    className="glass rounded-2xl p-8 shadow-lg border border-mint-accent/50 transition-smooth hover:shadow-xl hover:bg-white/70 animate-fade-in"
-                    style={{ animationDelay: "0.2s" }}
-                >
-                    <h3 className="font-semibold text-soft-black mb-6 flex items-center gap-2 text-lg">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-mint-light to-mint-medium flex items-center justify-center shadow-sm shadow-mint-dark/10">
-                            <TrendingUp className="w-5 h-5 text-mint-dark" />
+                <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Simulation Details</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div className="bg-gray-50 rounded p-3 border border-gray-200">
+                            <p className="text-sm text-gray-600 mb-1">Transactions Analyzed</p>
+                            <p className="text-xl font-bold text-gray-900">{result.details.transactionsAnalyzed.toLocaleString()}</p>
                         </div>
-                        Analysis Details
-                    </h3>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div className="bg-gradient-to-br from-mint-light/50 to-mint-accent/40 rounded-xl p-6 border border-mint-accent/60 transition-smooth hover:shadow-md hover:scale-105 hover:border-mint-dark/50">
-                            <p className="text-sm text-deep-grey/60 mb-2 font-medium">Transactions Analyzed</p>
-                            <p className="text-3xl font-bold text-mint-dark">
-                                {result.details.transactionsAnalyzed.toLocaleString()}
-                            </p>
+                        <div className="bg-gray-50 rounded p-3 border border-gray-200">
+                            <p className="text-sm text-gray-600 mb-1">Suspicious Activities</p>
+                            <p className="text-xl font-bold text-gray-900">{result.details.suspiciousCount}</p>
                         </div>
-
-                        <div className="bg-gradient-to-br from-mint-medium/40 to-mint-dark/30 rounded-xl p-6 border border-mint-dark/40 transition-smooth hover:shadow-md hover:scale-105 hover:border-mint-darker/60">
-                            <p className="text-sm text-deep-grey/60 mb-2 font-medium">Suspicious Count</p>
-                            <p className="text-3xl font-bold text-mint-dark">{result.details.suspiciousCount}</p>
-                        </div>
-
-                        <div
-                            className={`rounded-xl p-6 border-2 transition-smooth hover:shadow-md hover:scale-105 ${getRiskColor(result.details.riskLevel)}`}
-                        >
-                            <p className="text-sm font-medium mb-2">Risk Level</p>
-                            <p className="text-3xl font-bold">{result.details.riskLevel}</p>
+                        <div className={`rounded p-3 border-2 ${getRiskColor(result.details.riskLevel)}`}>
+                            <p className="text-sm font-medium mb-1">Risk Level</p>
+                            <p className="text-xl font-bold">{result.details.riskLevel}</p>
                         </div>
                     </div>
                 </div>
             )}
 
-            <div className="flex justify-center pt-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            {/* Action Buttons */}
+            <div className="flex justify-between items-center pt-4">
                 <button
                     onClick={onStartNewAnalysis}
-                    className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-mint-light to-mint-medium text-mint-dark font-semibold transition-smooth hover:shadow-lg hover:shadow-mint-dark/30 hover:scale-105 active:scale-95 border border-mint-accent/50"
+                    className="bg-[#39D98A] text-white px-6 py-2 rounded-lg font-semibold hover:bg-[#34d399] transition-colors"
                 >
-                    <span>Start New Analysis</span>
-                    <ArrowRight className="w-4 h-4" />
+                    Run New Simulation
+                </button>
+                <button className="flex items-center gap-2 border border-gray-300 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                    <Download className="w-4 h-4" />
+                    Export Report
                 </button>
             </div>
         </div>

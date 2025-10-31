@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { AppProvider } from "@/contexts/AppContext"
 import Header from "@/components/Header"
+import Footer from "@/components/Footer"
 
 const geist = Geist({ subsets: ["latin"] })
 const geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -24,6 +25,7 @@ export default function RootLayout({
         <AppProvider>
           <Header />
           {children}
+          <Footer />
         </AppProvider>
       </body>
     </html>

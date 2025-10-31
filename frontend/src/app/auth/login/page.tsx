@@ -39,19 +39,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen mint-gradient-bg flex items-center justify-center p-4">
-      <div className="glass rounded-2xl p-8 w-full max-w-md shadow-xl border border-mint-accent/50 animate-scale-in">
+    <div className="min-h-screen bg-gradient-to-b from-[#ECFFF9] via-white to-[#E9F6FF] flex items-center justify-center p-4">
+      <div className="glass rounded-2xl p-8 w-full max-w-md shadow-xl border border-[#39D98A]/30 animate-scale-in">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-mint-dark to-mint-darker bg-clip-text text-transparent">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#39D98A] to-[#007AFF] bg-clip-text text-transparent">
             LIFELOOP
           </h1>
-          <p className="text-deep-grey/60 mt-2">Sign in to your account</p>
+          <p className="text-[#5A5A5A] mt-2">Where Uncertainty Meets Intelligence</p>
         </div>
 
         {/* Login Form */}
         <form onSubmit={handleLogin} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-soft-black mb-2">
+            <label htmlFor="email" className="block text-sm font-medium text-[#1E1E1E] mb-2">
               Email Address
             </label>
             <input
@@ -60,13 +60,13 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg border border-mint-accent/40 bg-white/50 focus:border-mint-dark focus:ring-2 focus:ring-mint-dark/20 transition-smooth outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-[#39D98A]/20 bg-white/50 focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/20 transition-smooth outline-none"
               placeholder="Enter your email"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-soft-black mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-[#1E1E1E] mb-2">
               Password
             </label>
             <input
@@ -75,7 +75,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg border border-mint-accent/40 bg-white/50 focus:border-mint-dark focus:ring-2 focus:ring-mint-dark/20 transition-smooth outline-none"
+              className="w-full px-4 py-3 rounded-lg border border-[#39D98A]/20 bg-white/50 focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/20 transition-smooth outline-none"
               placeholder="Enter your password"
             />
           </div>
@@ -83,7 +83,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-mint-dark to-mint-darker text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-smooth hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 px-4 bg-gradient-to-r from-[#39D98A] to-[#007AFF] text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-smooth hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed electric-glow"
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
@@ -91,16 +91,16 @@ export default function LoginPage() {
                 Signing in...
               </div>
             ) : (
-              'Sign In'
+              'Login'
             )}
           </button>
         </form>
 
         {/* Sign up link */}
         <div className="mt-6 text-center">
-          <p className="text-deep-grey/60">
+          <p className="text-[#5A5A5A]">
             Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" className="text-mint-dark font-semibold hover:text-mint-darker transition-smooth">
+            <Link href="/auth/signup" className="text-[#007AFF] font-semibold hover:text-[#39D98A] transition-smooth">
               Sign up
             </Link>
           </p>

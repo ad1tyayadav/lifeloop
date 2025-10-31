@@ -1,6 +1,6 @@
 "use client"
 
-import { Loader2 } from "lucide-react"
+import { CircleCheck, Loader2 } from "lucide-react"
 
 interface SimulationButtonProps {
   isLoading: boolean
@@ -13,10 +13,11 @@ export default function SimulationButton({ isLoading, onClick, disabled }: Simul
     <button
       onClick={onClick}
       disabled={disabled || isLoading}
-      className={`w-full py-4 rounded-xl font-semibold transition-smooth flex items-center justify-center gap-2 text-lg ${disabled || isLoading
-          ? "bg-mint-light/40 text-mint-darker/50 cursor-not-allowed"
-          : "bg-gradient-to-r from-mint-medium to-mint-dark text-white hover:shadow-lg hover:shadow-mint-dark/40 hover:scale-105 active:scale-95 mint-glow"
-        }`}
+      className={`w-full py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2 ${
+        disabled || isLoading
+          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+          : "bg-[#39D98A] text-white hover:bg-[#34d399] active:scale-95"
+      }`}
     >
       {isLoading ? (
         <>
@@ -25,7 +26,7 @@ export default function SimulationButton({ isLoading, onClick, disabled }: Simul
         </>
       ) : (
         <>
-          <span>▶</span>
+          <CircleCheck className="w-5 h-5" />
           <span>Run Simulation</span>
         </>
       )}

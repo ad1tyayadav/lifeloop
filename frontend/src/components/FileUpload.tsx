@@ -15,16 +15,16 @@ export default function FileUploadBox({ file, onFileChange }: FileUploadBoxProps
 
     const handleDragOver = (e: React.DragEvent) => {
         e.preventDefault()
-        e.currentTarget.classList.add("border-mint-dark", "bg-mint-light/20")
+        e.currentTarget.classList.add("border-[#39D98A]", "bg-[#39D98A]/10")
     }
 
     const handleDragLeave = (e: React.DragEvent) => {
-        e.currentTarget.classList.remove("border-mint-dark", "bg-mint-light/20")
+        e.currentTarget.classList.remove("border-[#39D98A]", "bg-[#39D98A]/10")
     }
 
     const handleDrop = (e: React.DragEvent) => {
         e.preventDefault()
-        e.currentTarget.classList.remove("border-mint-dark", "bg-mint-light/20")
+        e.currentTarget.classList.remove("border-[#39D98A]", "bg-[#39D98A]/10")
 
         const files = e.dataTransfer.files
         if (files.length > 0) {
@@ -40,34 +40,34 @@ export default function FileUploadBox({ file, onFileChange }: FileUploadBoxProps
 
     return (
         <div>
-            <label className="block text-sm font-semibold text-soft-black mb-3">Upload Transaction CSV</label>
+            <label className="block text-sm font-semibold text-[#1E1E1E] mb-3">Upload Transaction CSV</label>
 
             <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={() => inputRef.current?.click()}
-                className="border-2 border-dashed border-mint-accent/60 rounded-xl p-8 text-center cursor-pointer transition-smooth hover:border-mint-dark hover:bg-mint-light/10 active:scale-95"
+                className="border-2 border-dashed border-[#39D98A]/30 rounded-xl p-8 text-center cursor-pointer transition-smooth hover:border-[#39D98A] hover:bg-[#39D98A]/5 active:scale-95"
             >
                 <input ref={inputRef} type="file" accept=".csv" onChange={handleFileSelect} className="hidden" />
 
                 {file ? (
                     <div className="flex items-center justify-center gap-4 animate-scale-in">
-                        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-mint-light to-mint-medium flex items-center justify-center shadow-md shadow-mint-dark/20">
-                            <Upload className="w-6 h-6 text-mint-dark" />
+                        <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-[#39D98A]/10 to-[#007AFF]/5 flex items-center justify-center shadow-md shadow-[#39D98A]/20">
+                            <Upload className="w-6 h-6 text-[#39D98A]" />
                         </div>
                         <div className="text-left">
-                            <p className="font-semibold text-soft-black">{file.name}</p>
-                            <p className="text-xs text-deep-grey/60">{(file.size / 1024).toFixed(2)} KB</p>
+                            <p className="font-semibold text-[#1E1E1E]">{file.name}</p>
+                            <p className="text-xs text-[#5A5A5A]">{(file.size / 1024).toFixed(2)} KB</p>
                         </div>
                     </div>
                 ) : (
                     <div>
-                        <div className="w-12 h-12 rounded-lg bg-mint-light/40 flex items-center justify-center mx-auto mb-3">
-                            <Upload className="w-6 h-6 text-mint-dark" />
+                        <div className="w-12 h-12 rounded-lg bg-[#39D98A]/10 flex items-center justify-center mx-auto mb-3">
+                            <Upload className="w-6 h-6 text-[#39D98A]" />
                         </div>
-                        <p className="font-semibold text-soft-black">Drag & drop your CSV here</p>
-                        <p className="text-sm text-deep-grey/60 mt-1">or click to browse</p>
+                        <p className="font-semibold text-[#1E1E1E]">Drag & drop your CSV here</p>
+                        <p className="text-sm text-[#5A5A5A] mt-1">Supports .CSV up to 5MB</p>
                     </div>
                 )}
             </div>
