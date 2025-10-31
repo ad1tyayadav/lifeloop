@@ -3,30 +3,63 @@ import { FocusCards } from "@/components/ui/focus-cards";
 export function FocusCardsDemo() {
     const cards = [
         {
-            title: "Forest Adventure Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto eius odit eveniet explicabo nihil magnam vel distinctio aspernatur",
-            src: "https://images.unsplash.com/photo-1518710843675-2540dd79065c?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            featNo: 1,
+            title: "The Chaos Lab",
+            tagline: "Where uncertainty becomes a controlled experiment.",
+            description: "LIFELOOP's Chaos Lab lets teams simulate crises before they happen. Upload real operational data, trigger hypothetical client loss, downtime, or compliance shocks, and instantly watch how your systems react. It transforms fear into foresight — giving IT leaders the power to practice survival before the storm hits.",
+            src: "/Images/F-1.jpg",
         },
         {
-            title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto eius odit eveniet explicabo nihil magnam vel distinctio aspernatur quas atque, voluptatum nobis",
-            src: "https://images.unsplash.com/photo-1600271772470-bd22a42787b3?q=80&w=3072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            featNo: 2,
+            title: "Chain Reaction Engine",
+            tagline: "Every decision sparks a ripple.",
+            description: "Our AI maps the invisible domino effects across departments — how one disruption spreads through revenue, trust, and workload. It reveals interdependencies that humans miss and helps leaders predict second- and third-order impacts in real time. This is not analytics. It's cause-and-effect intelligence.",
+            src: "/Images/F-2.jpg",
         },
         {
-            title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto eius odit eveniet explicabo",
-            src: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=3070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            featNo: 3,
+            title: "Financial Black Mirror Mode",
+            tagline: "See the future of your finances before it happens.",
+            description: "Run futuristic 'what-if' projections of financial stability. LIFELOOP's AI models forecast how every client churn or outage reshapes revenue, contracts, and future liquidity. It's like looking into your business's mirror dimension — except this reflection tells you what not to do.",
+            src: "/Images/F-3.jpg",
         },
         {
-            title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto eius odit eveniet explicabo nihil",
-            src: "https://images.unsplash.com/photo-1486915309851-b0cc1f8a0084?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            featNo: 4,
+            title: "Emotional Emergency Monitor",
+            tagline: "Because emotion drives retention.",
+            description: "Tracks satisfaction and stress patterns across clients and teams. Detects emotional fatigue or risk zones before they become losses. By combining data signals with behavioral AI, LIFELOOP alerts leaders when trust starts fading — keeping relationships stable when the system trembles.",
+            src: "/Images/F-4.jpg",
         },
         {
-            title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto eius odit eveniet explicabo nihil magnam",
-            src: "https://images.unsplash.com/photo-1507041957456-9c397ce39c97?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            featNo: 5,
+            title: "Exportable AI Core",
+            tagline: "Your intelligence, anywhere.",
+            description: "Every simulation in LIFELOOP can be exported as a self-contained AI agent — capable of running on other environments or integrating with MSP dashboards. This means your strategy engine travels with you — from boardrooms to servers — extending LIFELOOP's brain across your entire digital ecosystem.",
+            src: "/Images/F-5.jpg",
         },
         {
-            title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Iusto eius odit eveniet explicabo nihil magnam vel ",
-            src: "https://assets.aceternity.com/the-first-rule.png",
+            featNo: 6,
+            title: "The Loop Report",
+            tagline: "Your business, decoded monthly.",
+            description: "At the end of every simulation cycle, LIFELOOP generates a Loop Report — an AI-crafted digest that breaks down your system's current resilience, risks, and next-best actions. Readable by humans, respected by data. Think of it as your business's monthly mirror — written by AI, designed for decision.",
+            src: "/Images/F-6.jpg",
         },
+        {
+            featNo: 7,
+            title: "SDCC",
+            tagline: "When chaos hits, it takes the wheel.",
+            description: "SDCC automatically generates response playbooks for any simulated or real crisis. It predicts what happens next, assigns dynamic recovery steps, and keeps operations balanced under extreme pressure. This is autonomous stability — an AI co-pilot that thinks faster than the fall.",
+            src: "/Images/F-7.jpg",
+        }
     ];
 
-    return <FocusCards cards={cards} />;
+    return (
+        <div className='pt-18 pb-20 bg-white/80'>
+            <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-900 mb-4">Features</h2>
+                <p className="text-gray-600">Lorem ipsum dolor Lorem ipsum dolor Lorem</p>
+            </div>
+            <FocusCards cards={cards} />
+        </div>
+    )
 }

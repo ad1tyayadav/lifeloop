@@ -4,7 +4,7 @@ import Dashboard from "@/components/dashboard"
 import HeroSection from "@/components/HeroSection"
 import HistoryPage from "./history/page"
 import AboutUsSection from "./about/page"
-import Featurepage from "./features/page"
+import { FocusCardsDemo } from "@/components/Features"
 
 // import { useEffect } from "react"
 // import { useRouter } from "next/navigation"
@@ -28,7 +28,7 @@ export default function Home() {
       <Dashboard />
       <HistoryPage />
       <AboutUsSection />
-      <Featurepage />
+      <FocusCardsDemo />
     </div>
   )
 }
