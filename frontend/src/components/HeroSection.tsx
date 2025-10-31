@@ -18,7 +18,7 @@ export default function HeroSection() {
 
           {/* Building Image */}
           <Image
-            src="/images/Building.png"
+            src="/Images/Building.png"
             alt="building"
             className="absolute left-1/2 -translate-x-1/2 -top-80 sm:-top-28 md:-top-58 z-10 lg:w-[100vw] lg:h-[106vh] max-w-none"
             width={5000}
@@ -27,7 +27,7 @@ export default function HeroSection() {
 
           {/* Chart Image */}
           <Image
-            src="/images/Chart.png"
+            src="/Images/Chart.png"
             alt="chart"
             className="absolute left-1/2 opacity-60 -translate-x-1/2 -top-10 sm:-top-16 md:-top-24 lg:-top-18 z-10 w-3/4 sm:w-2/3 md:w-1/2 lg:w-[50vw]"
             width={5000}

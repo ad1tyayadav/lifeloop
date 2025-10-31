@@ -25,7 +25,7 @@ export default function AboutUsSection() {
                         <div className="relative">
                             {/* PNG Overlay Image */}
                             <Image
-                                src="/images/Talk.png"
+                                src="/Images/Talk.png"
                                 alt="decoration"
                                 className="absolute left-1/2 -translate-x-1/2 -top-8 sm:-top-12 md:-top-24 z-20 w-3/4 sm:w-2/3 md:w-1/2 lg:w-[40vw]"
                                 width={800}
