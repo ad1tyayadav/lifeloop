@@ -35,11 +35,11 @@ export const mockHistory = [
   {
     id: "1",
     date: "2024-01-15T10:30:00Z",
-    eventType: "Market Crash",
+    eventType: "Revenue Shock Simulation",
     question: "Analyze trading patterns during volatility",
     fileName: "transactions_q1_2024.csv",
     result: {
-      riskLevel: "High",
+      riskLevel: "Critical Zone",
       suspiciousCount: 15,
       transactionsAnalyzed: 2847,
     },
@@ -47,11 +47,11 @@ export const mockHistory = [
   {
     id: "2",
     date: "2024-01-14T14:20:00Z",
-    eventType: "Fraud Detection",
+    eventType: "Integrity Breach Scan",
     question: "Identify unusual withdrawal patterns",
     fileName: "bank_statements_jan.csv",
     result: {
-      riskLevel: "Medium",
+      riskLevel: "Caution Layer",
       suspiciousCount: 8,
       transactionsAnalyzed: 1562,
     },
@@ -63,7 +63,7 @@ export const mockHistory = [
     question: "Find outlier transactions in Q4 2023",
     fileName: "q4_2023_transactions.csv",
     result: {
-      riskLevel: "Low",
+      riskLevel: "Stable Zone",
       suspiciousCount: 3,
       transactionsAnalyzed: 892,
     },

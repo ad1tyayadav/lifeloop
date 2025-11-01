@@ -54,7 +54,7 @@ export function FocusCardsDemo() {
     ];
 
     return (
-        <div className='pt-18 pb-20 bg-white/80'>
+        <div id="features" className='pt-18 pb-20 bg-white/80'>
             <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">Features</h2>
                 <p className="text-gray-600">Lorem ipsum dolor Lorem ipsum dolor Lorem</p>

@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { TrendingDown, TrendingUp, Users, AlertTriangle, Download, BarChart3 } from "lucide-react"
 
 interface ResultsDisplayProps {
@@ -19,57 +18,10 @@ interface ResultsDisplayProps {
         }
     }
     onStartNewAnalysis: () => void
+    onExportReport?: () => void
 }
 
-export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDisplayProps) {
-    const [revenueCount, setRevenueCount] = useState(0)
-    const [workloadCount, setWorkloadCount] = useState(0)
-    const [trustCount, setTrustCount] = useState(0)
-
-    useEffect(() => {
-        const duration = 2000
-        const steps = 60
-        const increment = (target: number) => target / steps
-        const interval = duration / steps
-
-        let currentRevenue = 0
-        let currentWorkload = 0
-        let currentTrust = 0
-
-        const revenueTimer = setInterval(() => {
-            currentRevenue += increment(result.impact.revenueDrop)
-            if (currentRevenue >= result.impact.revenueDrop) {
-                currentRevenue = result.impact.revenueDrop
-                clearInterval(revenueTimer)
-            }
-            setRevenueCount(Math.floor(currentRevenue))
-        }, interval)
-
-        const workloadTimer = setInterval(() => {
-            currentWorkload += increment(result.impact.workloadIncrease)
-            if (currentWorkload >= result.impact.workloadIncrease) {
-                currentWorkload = result.impact.workloadIncrease
-                clearInterval(workloadTimer)
-            }
-            setWorkloadCount(Math.floor(currentWorkload))
-        }, interval)
-
-        const trustTimer = setInterval(() => {
-            currentTrust += increment(result.impact.trustDecline)
-            if (currentTrust >= result.impact.trustDecline) {
-                currentTrust = result.impact.trustDecline
-                clearInterval(trustTimer)
-            }
-            setTrustCount(Math.floor(currentTrust))
-        }, interval)
-
-        return () => {
-            clearInterval(revenueTimer)
-            clearInterval(workloadTimer)
-            clearInterval(trustTimer)
-        }
-    }, [result.impact])
-
+export default function ResultsDisplay({ result, onStartNewAnalysis, onExportReport }: ResultsDisplayProps) {
     const getRiskColor = (level: string) => {
         switch (level.toLowerCase()) {
             case "high":
@@ -83,12 +35,21 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
         }
     }
 
+    const handleExport = () => {
+        if (onExportReport) {
+            onExportReport();
+        } else {
+            console.log('Export functionality not implemented yet');
+            alert('Export feature coming soon!');
+        }
+    }
+
     return (
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-2">Simulation Results</h2>
-                <p className="text-gray-600">Chain-reaction impact analysis</p>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">Simulation Results: Your Future, Modeled.</h2>
+                <p className="text-gray-600">LIFELOOP&apos;s Chain-Reaction Engine forecasts your ecosystem impact — before it unfolds.</p>
             </div>
 
             {/* Impact Cards Grid */}
@@ -99,9 +60,9 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
                         <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
                             <TrendingDown className="w-5 h-5 text-red-600" />
                         </div>
-                        <span className="text-sm font-medium text-red-600">Revenue</span>
+                        <span className="text-sm font-medium text-red-600">Revenue Delta</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">{revenueCount}%</p>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">{result.impact.revenueDrop}%</p>
                     <p className="text-sm text-gray-500">Projected drop</p>
                 </div>
 
@@ -111,9 +72,9 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
                         <div className="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
                             <TrendingUp className="w-5 h-5 text-amber-600" />
                         </div>
-                        <span className="text-sm font-medium text-amber-600">Workload</span>
+                        <span className="text-sm font-medium text-amber-600">System Load</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">+{workloadCount}%</p>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">+{result.impact.workloadIncrease}%</p>
                     <p className="text-sm text-gray-500">Increase expected</p>
                 </div>
 
@@ -123,9 +84,9 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
                         <div className="w-10 h-10 rounded-lg bg-[#39D98A]/10 flex items-center justify-center">
                             <Users className="w-5 h-5 text-[#39D98A]" />
                         </div>
-                        <span className="text-sm font-medium text-[#39D98A]">Trust</span>
+                        <span className="text-sm font-medium text-[#39D98A]">Trust Index</span>
                     </div>
-                    <p className="text-2xl font-bold text-gray-900 mb-1">-{trustCount}%</p>
+                    <p className="text-2xl font-bold text-gray-900 mb-1">-{result.impact.trustDecline}%</p>
                     <p className="text-sm text-gray-500">Decline forecast</p>
                 </div>
             </div>
@@ -168,10 +129,10 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
             {/* Detailed Metrics */}
             {result.details && (
                 <div className="bg-white rounded-lg p-4 border border-gray-200 shadow-sm">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Simulation Details</h3>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">System Intelligence Log</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div className="bg-gray-50 rounded p-3 border border-gray-200">
-                            <p className="text-sm text-gray-600 mb-1">Transactions Analyzed</p>
+                            <p className="text-sm text-gray-600 mb-1">Transactions Processed</p>
                             <p className="text-xl font-bold text-gray-900">{result.details.transactionsAnalyzed.toLocaleString()}</p>
                         </div>
                         <div className="bg-gray-50 rounded p-3 border border-gray-200">
@@ -179,7 +140,7 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
                             <p className="text-xl font-bold text-gray-900">{result.details.suspiciousCount}</p>
                         </div>
                         <div className={`rounded p-3 border-2 ${getRiskColor(result.details.riskLevel)}`}>
-                            <p className="text-sm font-medium mb-1">Risk Level</p>
+                            <p className="text-sm font-medium mb-1">Risk Index</p>
                             <p className="text-xl font-bold">{result.details.riskLevel}</p>
                         </div>
                     </div>
@@ -194,9 +155,12 @@ export default function ResultsDisplay({ result, onStartNewAnalysis }: ResultsDi
                 >
                     Run New Simulation
                 </button>
-                <button className="flex items-center gap-2 border border-gray-300 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors">
+                <button
+                    onClick={handleExport}
+                    className="flex items-center gap-2 border border-gray-300 text-gray-700 px-6 py-2 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                >
                     <Download className="w-4 h-4" />
-                    Export Report
+                    Export Loop Report
                 </button>
             </div>
         </div>

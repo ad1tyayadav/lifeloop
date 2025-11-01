@@ -18,7 +18,7 @@ export default function QuestionInput({ question, onQuestionChange }: QuestionIn
                 rows={4}
             />
 
-            <p className="text-xs text-gray-500 mt-2">Be specific with your question for better results</p>
+            <p className="text-xs text-gray-500 mt-2">Ask anything your intuition fears. LIFELOOP simulates the ripple before reality does.</p>
         </div>
     )
 }

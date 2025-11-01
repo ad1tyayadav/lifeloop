@@ -1,68 +1,95 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useApp } from '@/contexts/AppContext';
-import { History, LogOut, Home, Play } from 'lucide-react';
-import Link from 'next/link';
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useApp } from "@/contexts/AppContext";
 
 export default function Header() {
-    const router = useRouter();
-    const { dispatch } = useApp();
+  const { logout } = useApp();
+  const router = useRouter();
+  const [activeSection, setActiveSection] = useState("hero");
 
-    const handleLogout = () => {
-        dispatch({ type: 'LOGOUT' });
-        router.push('/auth/login');
-    };
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
 
-    const handleNavigate = (path: string) => {
-        router.push(path);
-    };
+  const handleScroll = (id: string) => {
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
-    return (
-        <header className="border-b border-[#39D98A]/20 bg-gradient-to-r from-white via-[#ECFFF9] to-white backdrop-blur-md sticky top-0 z-50 transition-smooth shadow-sm">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <div className="flex items-center justify-between">
-                    {/* Logo */}
-                    <button
-                        onClick={() => handleNavigate('/dashboard')}
-                        className="animate-fade-in text-left hover:opacity-80 transition-smooth"
-                    >
-                        <Link href={'/dashboard'} className="text-3xl font-bold text-[#39D98A]">
-                            LIFELOOP
-                        </Link>
-                    </button>
+  useEffect(() => {
+    const sections = [
+      "hero",
+      "simulation-section",
+      "history",
+      "features",
+      "about",
+    ];
 
-                    {/* Navigation Buttons */}
-                    <div className="flex items-center gap-2">
-                        {/* Dashboard Button */}
-                        <button
-                            onClick={() => handleNavigate('/dashboard')}
-                            className="p-2 rounded-lg text-[#39D98A] hover:bg-[#39D98A]/20 transition-colors group"
-                        >
-                            Dashboard
-                        </button>
-
-                        {/* History Button */}
-                        <button
-                            onClick={() => handleNavigate('/history')}
-                            className="p-2 rounded-lg  text-[#39D98A] hover:bg-[#39D98A]/20 transition-colors group"
-                            title="View History"
-                        >
-                            History
-                        </button>
-
-                        {/* Logout Button */}
-                        <button
-                            onClick={handleLogout}
-                            className="p-2 rounded-lg bg-[#39D98A]/10 text-[#39D98A] hover:bg-red-50 hover:text-red-600 transition-colors"
-                            title="Logout"
-                        >
-                            <LogOut className="w-5 h-5" />
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { root: null, threshold: 0.5 }
     );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <header className="bg-[#E6F4F1] sticky top-0 z-50 border-b border-[#39D98A]/20 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between rounded-t-2xl">
+        {/* Logo */}
+        <Link href="/" className="text-3xl font-bold text-[#39D98A]">
+          LIFELOOP
+        </Link>
+
+        {/* Center Navigation */}
+        <nav className="flex items-center gap-3 px-3 py-1">
+          {[
+            { label: "Home", id: "hero" },
+            { label: "Impact Studio", id: "simulation-section" },
+            { label: "Archive", id: "history" },
+            { label: "Features", id: "features" },
+            { label: "About", id: "about" },
+          ].map((item, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleScroll(item.id)}
+              className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-300
+                ${
+                  activeSection === item.id
+                    ? "bg-[#F2FFF9] text-gray-900 border border-[#39D98A]/30 shadow-sm"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-[#F2FFF9]"
+                }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        {/* Right Button */}
+        <button
+          onClick={handleLogout}
+          className="bg-black text-white text-sm px-4 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors"
+        >
+          Logout
+        </button>
+      </div>
+    </header>
+  );
 }

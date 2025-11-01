@@ -1,58 +1,53 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useApp } from "@/contexts/AppContext"
-import Link from "next/link"
+import { useState, useEffect } from "react";
+import { useApp } from "@/contexts/AppContext";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const { dispatch } = useApp()
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  
+  const { login, state } = useApp();
+  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  useEffect(() => {
+    if (state.isAuthenticated) router.push("/");
+  }, [state.isAuthenticated, router]);
 
-    // Mock authentication - replace with actual API call
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // For demo, any email/password works
-      dispatch({
-        type: 'LOGIN',
-        payload: {
-          id: '1',
-          email: email,
-          name: email.split('@')[0]
-        }
-      })
-      
-      router.push('/dashboard')
-    } catch (error) {
-      console.error('Login failed:', error)
-    } finally {
-      setIsLoading(false)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email.trim() || !password.trim()) {
+      setError("Email and password are required");
+      return;
     }
-  }
+
+    try {
+      await login(email, password);
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#ECFFF9] via-white to-[#E9F6FF] flex items-center justify-center p-4">
-      <div className="glass rounded-2xl p-8 w-full max-w-md shadow-xl border border-[#39D98A]/30 animate-scale-in">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-[#39D98A] to-[#007AFF] bg-clip-text text-transparent">
-            LIFELOOP
-          </h1>
-          <p className="text-[#5A5A5A] mt-2">Where Uncertainty Meets Intelligence</p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center mint-gradient-bg">
+      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-center mb-8">Login to LIFELOOP</h2>
 
-        {/* Login Form */}
-        <form onSubmit={handleLogin} className="space-y-6">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-[#1E1E1E] mb-2">
-              Email Address
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email
             </label>
             <input
               id="email"
@@ -60,13 +55,12 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg border border-[#39D98A]/20 bg-white/50 focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/20 transition-smooth outline-none"
-              placeholder="Enter your email"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#39D98A] focus:border-transparent"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-[#1E1E1E] mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               Password
             </label>
             <input
@@ -75,37 +69,26 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-3 rounded-lg border border-[#39D98A]/20 bg-white/50 focus:border-[#007AFF] focus:ring-2 focus:ring-[#007AFF]/20 transition-smooth outline-none"
-              placeholder="Enter your password"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#39D98A] focus:border-transparent"
             />
           </div>
 
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-[#39D98A] to-[#007AFF] text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-smooth hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed electric-glow"
+            disabled={state.isLoading}
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#39D98A] hover:bg-[#2dbd7a] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#39D98A] disabled:opacity-50"
           >
-            {isLoading ? (
-              <div className="flex items-center justify-center">
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Signing in...
-              </div>
-            ) : (
-              'Login'
-            )}
+            {state.isLoading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
-        {/* Sign up link */}
-        <div className="mt-6 text-center">
-          <p className="text-[#5A5A5A]">
-            Don&apos;t have an account?{' '}
-            <Link href="/auth/signup" className="text-[#007AFF] font-semibold hover:text-[#39D98A] transition-smooth">
-              Sign up
-            </Link>
-          </p>
-        </div>
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Don&apos;t have an account?{" "}
+          <a href="/auth/signup" className="text-[#39D98A] hover:text-[#2dbd7a]">
+            Sign up
+          </a>
+        </p>
       </div>
     </div>
-  )
+  );
 }

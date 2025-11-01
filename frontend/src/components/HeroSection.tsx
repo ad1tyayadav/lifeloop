@@ -3,7 +3,7 @@ import React from "react";
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden">
+    <section id="hero" className="relative w-full overflow-hidden">
       {/* 🌈 Top Gradient Section */}
       <div className="relative h-[78vh] bg-gradient-to-b from-[#f1f2f4] via-[#edf2ef] to-[#bff5cf]">
         <div className="max-w-7xl mx-auto px-6 py-28 text-center relative">
@@ -67,8 +67,7 @@ export default function HeroSection() {
         {/* Content */}
         <div className="w-full relative -top-16 z-10">
           <p className="text-lg md:text-2xl font-bold text-gray-600 max-w-3xl mx-auto mb-8">
-            LIFELOOP empowers MSPs & IT teams to foresee the impact of tomorrow’s
-            disruptions — before they strike.
+            LIFELOOP empowers MSPs & IT teams to simulate tomorrow’s disruptions — and turn uncertainty into strategy.
           </p>
 
           {/* CTA Buttons */}
@@ -84,7 +83,7 @@ export default function HeroSection() {
               Get Started
             </button>
             <button className="border border-gray-400 text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
-              Watch Simulation
+              Watch Demo
             </button>
           </div>
         </div>

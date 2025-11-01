@@ -9,10 +9,10 @@ const fs = require('fs');
 async function simulate(req, res) {
   try {
     const user = req.user;
-    const { title, event_type, question } = req.body;
+    const { title, event_type, question } = req.body; // Make sure question is extracted
     if (!req.file) return res.status(400).json({ error: 'CSV file required (field name "file")' });
 
-    const file = req.file; // multer
+    const file = req.file;
     const stored = storeBuffer(file.originalname, file.buffer);
 
     // save file record
@@ -21,21 +21,27 @@ async function simulate(req, res) {
     const records = parseCsvBuffer(file.buffer);
     const summary = summarize(records);
 
-    // run orchestrator with simple extracted inputs from CSV sample or provided body
     const data = Object.assign({}, req.body, { data: req.body });
-    const report = orchestrate({ event_type, data: req.body });
+    const report = orchestrate({ event_type, data: req.body, question }); // Pass question to orchestrator
 
     const result_json = JSON.stringify(report);
 
-    const sim = db.run('INSERT INTO simulations (user_id, title, event_type, csv_filename, input_summary, result_json) VALUES (?, ?, ?, ?, ?, ?)', [user.id, title || 'Untitled', event_type || 'generic', stored.filename, JSON.stringify(summary), result_json]);
+    // ✅ FIX: Include question in the simulations table
+    const sim = db.run(
+      'INSERT INTO simulations (user_id, title, event_type, csv_filename, input_summary, result_json, question) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [user.id, title || 'Untitled', event_type || 'generic', stored.filename, JSON.stringify(summary), result_json, question || '']
+    );
     const simId = sim.lastInsertRowid;
 
     // update file with simulation_id
     db.run('UPDATE files SET simulation_id = ? WHERE id = ?', [simId, infoFile.lastInsertRowid]);
 
-    // add history entry
+    // ✅ FIX: Make sure question is saved in history too
     const agent_responses = JSON.stringify(report.perAgent || []);
-    db.run('INSERT INTO simulation_history (simulation_id, question, agent_responses, result_snapshot) VALUES (?, ?, ?, ?)', [simId, question || null, agent_responses, result_json]);
+    db.run(
+      'INSERT INTO simulation_history (simulation_id, question, agent_responses, result_snapshot) VALUES (?, ?, ?, ?)',
+      [simId, question || '', agent_responses, result_json]
+    );
 
     // Build graph data from history (single snapshot)
     const graph_data = {
@@ -44,7 +50,7 @@ async function simulate(req, res) {
       trust: [report.trust_drop]
     };
 
-    res.json({ id: simId, result: report, graph_data });
+    res.json({ id: simId, result: report, graph_data, question: question || '' }); // Include question in response
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
@@ -124,28 +130,56 @@ async function rerun(req, res) {
 
 async function report(req, res) {
   try {
-    const user = req.user; const id = req.params.id;
+    const user = req.user;
+    const id = req.params.id;
     const sim = db.get('SELECT * FROM simulations WHERE id = ? AND user_id = ?', [id, user.id]);
     if (!sim) return res.status(404).json({ error: 'Not found' });
 
     const files = db.all('SELECT * FROM files WHERE simulation_id = ?', [id]);
 
-      const REPORTS_DIR = process.env.REPORTS_DIR || './reports';
-      const reportsDir = path.isAbsolute(REPORTS_DIR) ? REPORTS_DIR : path.join(__dirname, '..', REPORTS_DIR.replace(/^\.\//, ''));
-      const UPLOAD_DIR = process.env.UPLOAD_DIR || './uploads';
-      const toZip = [ { path: path.join(__dirname, '..', 'data', 'dummy.txt'), name: 'note.txt' } ];
-      const tempZip = path.join(reportsDir, `simulation-${id}.zip`);
+    const REPORTS_DIR = process.env.REPORTS_DIR || './reports';
+    const reportsDir = path.isAbsolute(REPORTS_DIR) ? REPORTS_DIR : path.join(__dirname, '..', REPORTS_DIR.replace(/^\.\//, ''));
 
-    // include actual simulation JSON
-    const simJsonPath = path.join(__dirname, '..', 'reports', `simulation-${id}.json`);
+    // ✅ FIX: Create reports directory if it doesn't exist
+    if (!fs.existsSync(reportsDir)) {
+      fs.mkdirSync(reportsDir, { recursive: true });
+    }
+
+    const toZip = [{ path: path.join(__dirname, '..', 'data', 'dummy.txt'), name: 'note.txt' }];
+    const tempZip = path.join(reportsDir, `simulation-${id}.zip`);
+
+    // ✅ FIX: Create simulation JSON file in reports directory
+    const simJsonPath = path.join(reportsDir, `simulation-${id}.json`);
     fs.writeFileSync(simJsonPath, JSON.stringify(sim, null, 2));
     toZip.push({ path: simJsonPath, name: `simulation-${id}.json` });
 
-  files.forEach(f => toZip.push({ path: f.path, name: f.filename }));
+    // ✅ FIX: Only add files that actually exist
+    files.forEach(f => {
+      if (fs.existsSync(f.path)) {
+        toZip.push({ path: f.path, name: f.filename });
+      }
+    });
 
     await zipFiles(tempZip, toZip);
 
-    res.download(tempZip);
+    // ✅ FIX: Check if zip file was created before sending
+    if (fs.existsSync(tempZip)) {
+      res.download(tempZip, `simulation-report-${id}.zip`, (err) => {
+        if (err) {
+          console.error('Download error:', err);
+          res.status(500).json({ error: 'Failed to download report' });
+        }
+        // Clean up temp files after download
+        try {
+          fs.unlinkSync(tempZip);
+          fs.unlinkSync(simJsonPath);
+        } catch (cleanupErr) {
+          console.error('Cleanup error:', cleanupErr);
+        }
+      });
+    } else {
+      res.status(500).json({ error: 'Report generation failed' });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });

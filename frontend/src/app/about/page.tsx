@@ -3,7 +3,7 @@ import React from "react";
 
 export default function AboutUsSection() {
     return (
-        <section className="relative w-full overflow-hidden">
+        <section id="about" className="relative w-full overflow-hidden">
             {/* 🌈 Gradient Background Section */}
             <div className="relative bg-gradient-to-b from-white to-[#bff5cf] py-20">
                 <div className="max-w-7xl mx-auto px-6 text-center relative">

@@ -41,13 +41,15 @@ export default function ProgressModal({ isOpen, onClose, currentStep }: Progress
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4 shadow-xl border border-gray-200">
+            <div className="bg-white rounded-xl p-6 w-full max-w-xl mx-4 shadow-xl border border-gray-200">
                 {/* Header */}
                 <div className="text-center mb-6">
                     <h2 className="text-xl font-bold text-gray-900 mb-2">
-                        Running Simulation
+                LIFELOOP is Processing your ecosystem...
+
                     </h2>
-                    <p className="text-gray-600">Analyzing your financial data</p>
+                    <p className="text-gray-600">Decrypting your business matrix... <br />
+                    mapping financial patterns in real time</p>
                 </div>
 
                 {/* Progress Bar */}
