@@ -32,7 +32,11 @@ export default function HeroSection() {
           <Image
             src="/Images/Building.png"
             alt="building"
-            className="absolute left-1/2 -translate-x-1/2 -top-80 sm:-top-28 md:-top-58 z-10 lg:w-[100vw] lg:h-[106vh] max-w-none"
+            className="
+    absolute left-1/2 -translate-x-1/2 -top-80 sm:-top-28 md:-top-58 z-10 
+    lg:w-[100vw] lg:h-[108vh] max-w-none 
+    nest-hub-height nest-hub-max-height
+  "
             width={5000}
             height={950}
           />
