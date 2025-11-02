@@ -1,8 +1,20 @@
+"use client";
+
 import Image from "next/image";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function HeroSection() {
-  return (
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ---------------- DESKTOP VIEW ----------------
+  const DesktopHero = () => (
     <section id="hero" className="relative w-full overflow-hidden">
       {/* 🌈 Top Gradient Section */}
       <div className="relative h-[78vh] bg-gradient-to-b from-[#f1f2f4] via-[#edf2ef] to-[#bff5cf]">
@@ -90,4 +102,46 @@ export default function HeroSection() {
       </div>
     </section>
   );
+
+  // ---------------- MOBILE / TABLET VIEW ----------------
+  const MobileHero = () => (
+    <section
+      id="hero"
+      className="relative w-full overflow-hidden bg-gradient-to-b from-white via-[#ecfff3] to-[#bff5cf] py-24 px-6 text-center"
+    >
+      <div className="max-w-xl mx-auto">
+        {/* Clean Title */}
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 leading-tight">
+          SIMULATION{" "}
+          <span className="block text-[#39D98A]">AS STRATEGY</span>
+        </h1>
+
+        {/* Description */}
+        <p className="text-base sm:text-lg text-gray-600 mt-6 leading-relaxed">
+          LIFELOOP empowers MSPs & IT teams to simulate tomorrow’s disruptions
+          — turning uncertainty into strategy.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
+          <button
+            onClick={() => {
+              const section = document.getElementById("simulation-section");
+              if (section) {
+                section.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+            className="bg-[#39D98A] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#2fc27a] transition"
+          >
+            Get Started
+          </button>
+          <button className="border border-gray-400 text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+            Watch Demo
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+
+  return isDesktop ? <DesktopHero /> : <MobileHero />;
 }

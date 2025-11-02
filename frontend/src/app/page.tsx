@@ -8,6 +8,7 @@ import HeroSection from "@/components/HeroSection";
 import HistoryPage from "./history/page";
 import AboutUsSection from "./about/page";
 import { FocusCardsDemo } from "@/components/Features";
+import GlassBlocks from "@/components/ThreeBlock";
 
 export default function Home() {
   const { state } = useApp();
@@ -41,8 +42,9 @@ export default function Home() {
       <HeroSection />
       <Dashboard />
       <HistoryPage />
-      <AboutUsSection />
       <FocusCardsDemo />
+      <AboutUsSection />
+      <GlassBlocks />
     </div>
   );
 }

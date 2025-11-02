@@ -32,10 +32,10 @@ export function FocusCardsDemo() {
         },
         {
             featNo: 5,
-            title: "Exportable AI Core",
-            tagline: "Your intelligence, anywhere.",
-            description: "Every simulation in LIFELOOP can be exported as a self-contained AI agent — capable of running on other environments or integrating with MSP dashboards. This means your strategy engine travels with you — from boardrooms to servers — extending LIFELOOP's brain across your entire digital ecosystem.",
-            src: "/Images/F-5.jpg",
+            title: "SDCC",
+            tagline: "When chaos hits, it takes the wheel.",
+            description: "SDCC automatically generates response playbooks for any simulated or real crisis. It predicts what happens next, assigns dynamic recovery steps, and keeps operations balanced under extreme pressure. This is autonomous stability — an AI co-pilot that thinks faster than the fall.",
+            src: "/Images/F-7.jpg",
         },
         {
             featNo: 6,
@@ -46,20 +46,23 @@ export function FocusCardsDemo() {
         },
         {
             featNo: 7,
-            title: "SDCC",
-            tagline: "When chaos hits, it takes the wheel.",
-            description: "SDCC automatically generates response playbooks for any simulated or real crisis. It predicts what happens next, assigns dynamic recovery steps, and keeps operations balanced under extreme pressure. This is autonomous stability — an AI co-pilot that thinks faster than the fall.",
-            src: "/Images/F-7.jpg",
-        }
+            title: "Exportable AI Core",
+            tagline: "Your intelligence, anywhere.",
+            description: "Every simulation in LIFELOOP can be exported as a self-contained AI agent — capable of running on other environments or integrating with MSP dashboards. This means your strategy engine travels with you — from boardrooms to servers — extending LIFELOOP's brain across your entire digital ecosystem.",
+            src: "/Images/F-5.jpg",
+        },
     ];
 
     return (
         <div id="features" className='pt-18 pb-20 bg-white/80'>
             <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 mb-4">Features</h2>
-                <p className="text-gray-600">Lorem ipsum dolor Lorem ipsum dolor Lorem</p>
+                <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">THE SIMULATION SUITE</h2>
+                <p className="text-xl text-gray-600">Where every module predicts the unpredictable.</p>
             </div>
             <FocusCards cards={cards} />
+             <p className="text-center mt-20 text-gray-800 text-lg italic font-medium">
+              Built for those who lead ahead of time.
+            </p>
         </div>
     )
 }

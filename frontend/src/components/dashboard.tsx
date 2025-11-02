@@ -22,8 +22,8 @@ const STEPS = [
 
 export default function Dashboard() {
   const [file, setFile] = useState<File | null>(null)
-  const [selectedEvent, setSelectedEvent] = useState<string>("")
-  const [question, setQuestion] = useState<string>("")
+  const [selectedEvent, setSelectedEvent] = useState("")
+  const [question, setQuestion] = useState("")
   const [showProgressModal, setShowProgressModal] = useState(false)
   const [currentProgressStep, setCurrentProgressStep] = useState(1)
 
@@ -84,49 +84,28 @@ export default function Dashboard() {
   }
 
   const handleStartNewAnalysis = () => {
-    // Clear local state
     setFile(null)
     setSelectedEvent("")
     setQuestion("")
-    
-    // Clear current simulation from context
     dispatch({ type: "ADD_SIMULATION", payload: null as any })
   }
 
   const handleExportReport = async () => {
-    if (!state.currentSimulation) return;
-    
+    if (!state.currentSimulation) return
     try {
-      console.log('Starting download for simulation:', state.currentSimulation.id);
-      
-      const blob = await simulationAPI.downloadReport(state.currentSimulation.id);
-      
-      // Check if we got a valid blob
-      if (!blob || blob.size === 0) {
-        throw new Error('Empty response from server');
-      }
-      
-      // Create download link
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = `lifeloop-report-${state.currentSimulation.id}.zip`;
-      
-      document.body.appendChild(a);
-      a.click();
-      
-      // Clean up
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      
-      console.log('✅ Download completed successfully');
+      const blob = await simulationAPI.downloadReport(state.currentSimulation.id)
+      if (!blob || blob.size === 0) throw new Error("Empty response from server")
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.style.display = "none"
+      a.href = url
+      a.download = `lifeloop-report-${state.currentSimulation.id}.zip`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
     } catch (error: any) {
-      console.error('❌ Failed to download simulation:', error);
-      
-      // Fallback: Create a client-side text report
-      console.log('Backend download failed, generating client-side report...');
-      
+      console.error("Download error:", error)
       const reportContent = `
 LIFELOOP SIMULATION REPORT
 ==========================
@@ -135,64 +114,61 @@ Simulation ID: ${state.currentSimulation.id}
 Date: ${new Date().toLocaleDateString()}
 Event Type: ${state.currentSimulation.eventType}
 Question: ${state.currentSimulation.question}
-
-IMPACT ANALYSIS:
-• Revenue Impact: ${state.currentSimulation.result.impact.revenueDrop}%
-• Workload Impact: +${state.currentSimulation.result.impact.workloadIncrease}%
-• Trust Impact: -${state.currentSimulation.result.impact.trustDecline}%
-
-AI RECOMMENDATION:
-${state.currentSimulation.result.suggestion}
-
-DETAILED ANALYSIS:
-${state.currentSimulation.result.report}
-
-TECHNICAL DETAILS:
-• Transactions Analyzed: ${state.currentSimulation.result.details?.transactionsAnalyzed || 'N/A'}
-• Suspicious Activities: ${state.currentSimulation.result.details?.suspiciousCount || 'N/A'}
-• Risk Level: ${state.currentSimulation.result.details?.riskLevel || 'N/A'}
-      `;
-      
-      const blob = new Blob([reportContent], { type: 'text/plain' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `lifeloop-report-${state.currentSimulation.id}.txt`;
-      a.click();
-      window.URL.revokeObjectURL(url);
-      
-      alert('Report downloaded as text file (backend export coming soon)');
+...
+`
+      const blob = new Blob([reportContent], { type: "text/plain" })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `lifeloop-report-${state.currentSimulation.id}.txt`
+      a.click()
+      window.URL.revokeObjectURL(url)
+      alert("Report downloaded as text file (backend export coming soon)")
     }
-  };
+  }
 
   useEffect(() => {
     document.body.style.overflow = showProgressModal ? "hidden" : "auto"
   }, [showProgressModal])
 
   return (
-    <div className="bg-gradient-to-b from-[#ECFFF9] via-white to-[#E9F6FF]">
-      {/* Simulation Section */}
-      <section id="simulation-section" className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Launch Impact Simulation</h2>
-            <p className="text-gray-600">Upload your data. Simulate the shock. See the impact — before it happens</p>
+    <div className="bg-gradient-to-b from-[#ECFFF9] via-white to-[#E9F6FF] min-h-screen">
+      <section id="simulation-section" className="py-16 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+              Launch Impact Simulation
+            </h2>
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+              Upload your data. Simulate the shock. See the impact — before it happens.
+            </p>
           </div>
 
-          <Stepper steps={STEPS} currentStep={getCurrentStep()} />
+          {/* Stepper */}
+          <div className="overflow-x-auto">
+            <Stepper steps={STEPS} currentStep={getCurrentStep()} />
+          </div>
 
+          {/* Main Grid */}
           {!state.currentSimulation ? (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-[70vw] relative right-20">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-10">
+              {/* Left Section */}
               <div className="lg:col-span-2">
                 <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
                   <div className="flex items-center gap-3 mb-6">
                     <Zap className="w-6 h-6 text-[#39D98A]" />
                     <h3 className="text-xl font-semibold text-gray-900">Impact Studio</h3>
                   </div>
+
                   <div className="space-y-6">
                     <FileUploadBox file={file} onFileChange={setFile} />
-                    {file && <EventSelector selectedEvent={selectedEvent} onEventChange={setSelectedEvent} />}
-                    {selectedEvent && <QuestionInput question={question} onQuestionChange={setQuestion} />}
+                    {file && (
+                      <EventSelector selectedEvent={selectedEvent} onEventChange={setSelectedEvent} />
+                    )}
+                    {selectedEvent && (
+                      <QuestionInput question={question} onQuestionChange={setQuestion} />
+                    )}
                     {question.trim() && (
                       <SimulationButton
                         isLoading={state.isLoading}
@@ -204,11 +180,12 @@ TECHNICAL DETAILS:
                 </div>
               </div>
 
+              {/* Right Section */}
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 h-fit">
                 <h4 className="text-lg font-semibold text-gray-900 mb-4">How It Works</h4>
                 <div className="space-y-4">
                   {STEPS.map((step, index) => (
-                    <div key={step.id} className="flex items-center gap-3">
+                    <div key={step.id} className="flex items-start sm:items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#39D98A] text-white flex items-center justify-center font-semibold text-sm">
                         {index + 1}
                       </div>

@@ -66,18 +66,18 @@ export default function HistoryPage() {
   };
 
   // Filter history based on search term
-const filteredHistory = state.history.filter(simulation => {
-  if (!simulation) return false;
-  const eventType = simulation.eventType?.toLowerCase() || '';
-  const fileName = simulation.fileName?.toLowerCase() || '';
-  const question = simulation.question?.toLowerCase() || '';
-  
-  return (
-    eventType.includes(searchTerm.toLowerCase()) ||
-    fileName.includes(searchTerm.toLowerCase()) ||
-    question.includes(searchTerm.toLowerCase())
-  );
-});
+  const filteredHistory = state.history.filter(simulation => {
+    if (!simulation) return false;
+    const eventType = simulation.eventType?.toLowerCase() || '';
+    const fileName = simulation.fileName?.toLowerCase() || '';
+    const question = simulation.question?.toLowerCase() || '';
+
+    return (
+      eventType.includes(searchTerm.toLowerCase()) ||
+      fileName.includes(searchTerm.toLowerCase()) ||
+      question.includes(searchTerm.toLowerCase())
+    );
+  });
 
   // Action handlers
   const handleDownload = async (simulationId: string) => {
@@ -118,10 +118,10 @@ const filteredHistory = state.history.filter(simulation => {
   };
 
   return (
-    <div id="history" className="min-h-screen bg-gradient-to-b from-[#ECFFF9] via-white to-[#E9F6FF]">
+    <div id="history" className="bg-gradient-to-b from-[#ECFFF9] via-white to-[#E9F6FF]">
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="p-8 ">
+        <div className="p-8">
           {/* Page Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8">
             <div>
@@ -140,8 +140,8 @@ const filteredHistory = state.history.filter(simulation => {
                 disabled={loading}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg border border-[#39D98A]/20 bg-white/50 hover:bg-[#39D98A]/10 transition-colors disabled:opacity-50"
               >
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                {loading ? 'Loading...' : 'Refresh'}
+                <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+                {loading ? "Loading..." : "Refresh"}
               </button>
 
               {/* Search Bar */}
@@ -160,30 +160,30 @@ const filteredHistory = state.history.filter(simulation => {
 
           {/* Loading State */}
           {loading && (
-            <div className="text-center py-8">
-              <RefreshCw className="w-8 h-8 text-[#39D98A] animate-spin mx-auto mb-4" />
+            <div className="flex flex-col items-center justify-center py-24">
+              <RefreshCw className="w-8 h-8 text-[#39D98A] animate-spin mb-4" />
               <p className="text-[#5A5A5A]">Loading simulation history...</p>
             </div>
           )}
 
           {/* Empty State */}
           {!loading && state.history.length === 0 && (
-            <div className="text-center py-12">
-              <FileText className="w-16 h-16 text-[#39D98A]/40 mx-auto mb-4" />
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+              <FileText className="w-16 h-16 text-[#39D98A]/40 mb-4" />
               <p className="text-[#5A5A5A] text-lg mb-2">No simulation history yet</p>
-              <p className="text-[#5A5A5A]/60 text-sm">
-                Run your first analysis to see it appear here
+              <p className="text-[#5A5A5A]/60 text-sm max-w-sm">
+                Run your first analysis to see it appear here.
               </p>
             </div>
           )}
 
           {/* No Results State */}
           {!loading && state.history.length > 0 && filteredHistory.length === 0 && (
-            <div className="text-center py-12">
-              <Search className="w-16 h-16 text-[#39D98A]/40 mx-auto mb-4" />
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+              <Search className="w-16 h-16 text-[#39D98A]/40 mb-4" />
               <p className="text-[#5A5A5A] text-lg mb-2">No matching simulations found</p>
-              <p className="text-[#5A5A5A]/60 text-sm">
-                Try adjusting your search terms
+              <p className="text-[#5A5A5A]/60 text-sm max-w-sm">
+                Try adjusting your search terms.
               </p>
             </div>
           )}
@@ -204,14 +204,14 @@ const filteredHistory = state.history.filter(simulation => {
                         <h3 className="font-semibold text-[#1E1E1E] text-lg">
                           {getEventTitle(simulation.eventType)}
                         </h3>
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(getRiskLevel(simulation.result?.impact))}`}>
+                        <span
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(getRiskLevel(simulation.result?.impact))}`}
+                        >
                           {getRiskLevel(simulation.result?.impact)}
                         </span>
                       </div>
 
-                      <p className="text-[#5A5A5A] mb-3">
-                        {simulation.question}
-                      </p>
+                      <p className="text-[#5A5A5A] mb-3">{simulation.question}</p>
 
                       <div className="flex flex-wrap items-center gap-4 text-sm text-[#5A5A5A]">
                         <div className="flex items-center gap-1">
@@ -222,43 +222,14 @@ const filteredHistory = state.history.filter(simulation => {
                           <FileText className="w-4 h-4" />
                           <span>{simulation.fileName}</span>
                         </div>
-                        {simulation.result?.details && (
-                          <>
-                            <div>
-                              <span className="font-medium text-[#1E1E1E]">
-                                {simulation.result.details.transactionsAnalyzed}
-                              </span> transactions analyzed
-                            </div>
-                            <div>
-                              <span className="font-medium text-[#1E1E1E]">
-                                {simulation.result.details.suspiciousCount}
-                              </span> suspicious items
-                            </div>
-                          </>
-                        )}
-                        {/* Impact Metrics */}
-                        {simulation.result?.impact && (
-                          <div className="flex items-center gap-4">
-                            <div className="text-red-600">
-                              Revenue: -{simulation.result.impact.revenueDrop}%
-                            </div>
-                            <div className="text-amber-600">
-                              Workload: +{simulation.result.impact.workloadIncrease}%
-                            </div>
-                            <div className="text-[#39D98A]">
-                              Trust: -{simulation.result.impact.trustDecline}%
-                            </div>
-                          </div>
-                        )}
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
+                    {/* Actions */}
                     <div className="flex items-center gap-2 flex-shrink-0">
                       <button
                         onClick={() => handleDownload(simulation.id)}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#39D98A] text-white hover:bg-[#34d399] transition-colors hover:shadow-md active:scale-95 group"
-                        title="Download report"
                       >
                         <Download className="w-4 h-4" />
                         <span className="text-sm">Export</span>
@@ -266,20 +237,21 @@ const filteredHistory = state.history.filter(simulation => {
                       <button
                         onClick={() => handleViewDetails(simulation)}
                         className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#007AFF] text-white hover:bg-[#0066CC] transition-colors hover:shadow-md active:scale-95 group"
-                        title="View details"
                       >
                         <Eye className="w-4 h-4" />
                         <span className="text-sm">Details</span>
                       </button>
                     </div>
                   </div>
-                  LIFELOOP retains a 30-day memory cycle for adaptive re-learning.
+                  <p className="text-xs text-gray-500 mt-4">
+                    LIFELOOP retains a 30-day memory cycle for adaptive re-learning.
+                  </p>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Simulation Details Modal */}
+          {/* Modal */}
           <SimulationDetailsModal
             simulation={selectedSimulation}
             isOpen={isModalOpen}
@@ -289,5 +261,6 @@ const filteredHistory = state.history.filter(simulation => {
         </div>
       </main>
     </div>
-  )
+  );
+
 }
