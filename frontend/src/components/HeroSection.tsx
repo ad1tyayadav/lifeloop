@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import VideoModal from "./VdoModal";
 
 export default function HeroSection() {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
@@ -98,12 +100,20 @@ export default function HeroSection() {
               className="bg-green-500 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-600 transition">
               Get Started
             </button>
-            <button className="border border-gray-400 text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+            <button
+              onClick={() => setIsVideoOpen(true)}
+              className="border border-gray-400 text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+            >
               Watch Demo
             </button>
           </div>
         </div>
       </div>
+      <VideoModal
+        videoSrc="/videos/demo.mp4"
+        isOpen={isVideoOpen}
+        onClose={() => setIsVideoOpen(false)}
+      />
     </section>
   );
 
@@ -139,11 +149,19 @@ export default function HeroSection() {
           >
             Get Started
           </button>
-          <button className="border border-gray-400 text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+          <button
+            onClick={() => setIsVideoOpen(true)}
+            className="border border-gray-400 text-gray-800 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition"
+          >
             Watch Demo
           </button>
         </div>
       </div>
+      <VideoModal
+        videoSrc="/videos/demo.mp4"
+        isOpen={isVideoOpen}
+        onClose={() => setIsVideoOpen(false)}
+      />
     </section>
   );
 
