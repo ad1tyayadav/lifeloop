@@ -18,19 +18,19 @@ const EVENTS = [
     id: "event1",
     label: EVENT_TYPES.event1,
     description: "Forecast the financial ripple before it hits.",
-    src: "/Images/Event-1.jpg",
+    src: "/Images/EVENT-1.jpg",
   },
   {
     id: "event2",
     label: EVENT_TYPES.event2,
     description: "Expose trust fractures before they spread.",
-    src: "/Images/Event-2.jpg",
+    src: "/Images/EVENT-2.jpg",
   },
   {
     id: "event3",
     label: EVENT_TYPES.event3,
     description: "Detect silent shifts in your ecosystem early.",
-    src: "/Images/Event-3.jpg",
+    src: "/Images/EVENT-3.jpg",
   },
 ];
 
