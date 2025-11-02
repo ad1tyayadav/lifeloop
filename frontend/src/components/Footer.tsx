@@ -22,7 +22,7 @@ export default function Footer() {
               Predict the ripple. Perfect the response.
               <br />
               <span className="text-gray-600">
-                LIFELOOP — the simulation layer for forward-thinking teams.
+                LIFELOOP — The Simulation Layer for Those Who Lead Time, Not Follow It.
               </span>
             </p>
           </div>

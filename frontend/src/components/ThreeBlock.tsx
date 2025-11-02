@@ -11,15 +11,15 @@ const fadeUp = {
 const blocks = [
   {
     title: "Predict with Precision",
-    desc: "We turn uncertainty into foresight — transforming raw data into actionable clarity that drives confident decisions.",
+    desc: "Where uncertainty ends and foresight begins. Every model in LIFELOOP transforms chaos into calculable clarity — so decisions are never delayed by doubt.",
   },
   {
     title: "Design with Integrity",
-    desc: "Every model, every metric, every insight is transparent and trustworthy — built to empower, not obscure.",
+    desc: "Built on truth, powered by transparency. Every loop, every insight, every outcome is traceable — crafted to earn trust, not ask for it.",
   },
   {
     title: "Evolve with Insight",
-    desc: "Adaptation is our core principle — learning continuously to stay ahead of risk, change, and complexity.",
+    desc: "LIFELOOP learns with every ripple — growing wiser, faster, sharper. Adaptation isn’t our response; it’s our nature.",
   },
 ];
 
